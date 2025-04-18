@@ -24,80 +24,100 @@ import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [role, setRole] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
 
     const formData = new FormData(e.currentTarget);
-    const username = formData.get("name");
+    const name = formData.get("name");
     const password = formData.get("password");
 
-    console.log(password, username, "=========");
+    console.log(name, password, role, "======== Form Data");
 
-    const res = await fetch("http://localhost:3000/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password, role }),
-    });
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, password, role }),
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (res.ok) {
-      alert("Login success");
-      router.push("/article"); // arahkan ke dashboard kalau perlu
-    } else {
-      alert(data.error || "Login failed");
+      if (res.ok) {
+        alert("Login success");
+        router.push("/article"); // arahkan ke dashboard setelah login
+      } else {
+        alert(data.message || "Login failed");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("An error occurred during login");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="flex justify-center items-center min-h-screen">
-      <div className="flex gap-4 items-stretch">
+      <div className="flex gap-6 items-stretch overflow-hidden">
         {/* Card Gambar */}
-        <Card className="w-[350px] p-0 overflow-hidden relative">
-          <div className="relative w-full h-full">
+        <Card className="w-[400px] p-0 overflow-hidden relative">
+          <div className="relative w-full h-full min-h-[500px]">
             <Image
               src="https://ik.imagekit.io/q7pvfvakd/WIN_20250322_14_40_50_Pro.jpg"
               alt="background-login"
               fill
               style={{ objectFit: "cover" }}
+              priority
             />
           </div>
         </Card>
 
         {/* Card Form */}
-        <Card className="w-[350px] flex flex-col justify-between">
-          <CardHeader>
-            <CardTitle>AFM Dashboard</CardTitle>
-            <CardDescription>Dashboard for all PPM peeps.</CardDescription>
+        <Card className="w-[400px] flex flex-col justify-between">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-2xl font-bold text-gray-800">
+              AFM Dashboard
+            </CardTitle>
+            <CardDescription className="text-gray-600">
+              Dashboard for all PPM peeps.
+            </CardDescription>
           </CardHeader>
           <CardContent className="flex-1">
-            <form onSubmit={handleSubmit} className="h-full">
-              <div className="grid w-full items-center gap-4">
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="name">Name</Label>
+            <form onSubmit={handleSubmit} className="h-full space-y-6">
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="name" className="text-sm font-medium">
+                    Name
+                  </Label>
                   <Input
                     name="name"
                     id="name"
-                    placeholder="ex: Attar komtol"
+                    placeholder="Enter your name"
                     className="w-full"
                     required
                   />
                 </div>
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="password">Password</Label>
+                <div className="space-y-2">
+                  <Label htmlFor="password" className="text-sm font-medium">
+                    Password
+                  </Label>
                   <Input
                     name="password"
                     id="password"
-                    placeholder="ex: 123456"
+                    placeholder="Enter your password"
                     className="w-full"
                     type="password"
                     required
                   />
                 </div>
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="Role">Role</Label>
+                <div className="space-y-2">
+                  <Label htmlFor="Role" className="text-sm font-medium">
+                    Role
+                  </Label>
                   <Select value={role} onValueChange={setRole} required>
                     <SelectTrigger id="Role" className="w-full">
                       <SelectValue placeholder="Select Role" />
@@ -111,18 +131,18 @@ export default function Home() {
                   </Select>
                 </div>
               </div>
-              {/* Button moved inside form for submit trigger */}
-              <CardFooter className="flex justify-between pt-6">
+              <div className="flex justify-between pt-2">
                 <Button type="button" variant="outline">
                   Cancel
                 </Button>
                 <Button
                   type="submit"
-                  className="bg-[#A2D812] text-black hover:bg-[#91c50f]"
+                  className="bg-[#A2D812] text-black hover:bg-[#91c50f] px-6"
+                  disabled={isLoading}
                 >
-                  Submit
+                  {isLoading ? "Logging in..." : "Login"}
                 </Button>
-              </CardFooter>
+              </div>
             </form>
           </CardContent>
         </Card>

@@ -1,9 +1,20 @@
-import { Pool } from "pg";
+import { MongoClient } from "mongodb";
 
-const pool = new Pool({
-  connectionString: "postgresql://postgres:postgres@localhost:5432/AFM_DB",
-});
+const connectionDb =
+  process.env.MONGODB_CONNECTION_STRING ||
+  "mongodb+srv://masakbar2905:mei555@cluster0.ratubnl.mongodb.net/?retryWrites=true&w=majority";
+if (!connectionDb) {
+  throw new Error("MONGODB_CONNECTION_STRING is not defined");
+}
 
-export const query = (text: string, params?: any[]) => {
-  return pool.query(text, params);
+let client: MongoClient;
+// console.log('haloooo');
+
+export const getMongoClientInstance = async () => {
+  if (!client) {
+    client = await MongoClient.connect(connectionDb);
+    await client.connect();
+  }
+
+  return client;
 };

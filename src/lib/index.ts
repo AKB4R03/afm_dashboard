@@ -4,7 +4,7 @@ import * as jose from "jose";
 const SECRET_KEY = "RAHASIA";
 
 export const hashPw = (password: string) => {
-  return bcrypt.hashSync(password);
+  return bcrypt.hashSync(password, 10);
 };
 
 export const comparePw = (password: string, hashpassword: string) => {

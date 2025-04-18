@@ -1,36 +1,58 @@
-import { NextRequest, NextResponse } from "next/server";
-import { query } from "@/db/db";
+import { z } from "zod";
+import { NextResponse } from "next/server";
 import { hashPw } from "@/lib";
+import { insertUser, getUserByName } from "@/model/users";
 
-export async function POST(req: NextRequest) {
+export async function POST(request: Request) {
   try {
-    const { username, password, role } = await req.json();
+    const data = await request.json();
 
-    if (!username || !password || !role) {
-      return NextResponse.json({ error: "Missing fields" }, { status: 400 });
+    const registerSchema = z.object({
+      email: z.string().email("Invalid email format"),
+      password: z.string().min(6, "Password must be at least 6 characters"),
+      name: z.string().nonempty("Name is required"),
+      role: z.enum(["parent", "admin", "pamong", "humas"]),
+    });
+
+    const parsedData = registerSchema.safeParse(data);
+
+    if (!parsedData.success) {
+      const issue = parsedData.error.issues[0];
+      const errorFinal = `${issue.path[0]} - ${issue.message}`;
+      return NextResponse.json({
+        statusCode: 400,
+        message: errorFinal,
+      });
     }
 
-    // Optional: check if user already exists
-    const existing = await query('SELECT * FROM "Users" WHERE username = $1', [
-      username,
-    ]);
+    const { email, password, name, role } = parsedData.data;
 
-    if (existing.rowCount ?? 0) {
-      return NextResponse.json(
-        { error: "User already exists" },
-        { status: 409 }
-      );
+    const existingUser = await getUserByName(name);
+    if (existingUser) {
+      return NextResponse.json({
+        statusCode: 409,
+        message: "Email is already registered",
+      });
     }
 
-    let newPw = hashPw(password);
+    const hashedPassword = hashPw(password); // pastikan hashPw kamu async
 
-    const result = await query(
-      'INSERT INTO "Users" (username, password, role) VALUES ($1, $2, $3) RETURNING id, username, role',
-      [username, newPw, role]
-    );
+    await insertUser({
+      email,
+      password: hashedPassword,
+      name,
+      role,
+    });
 
-    return NextResponse.json({ success: true, user: result.rows[0] });
+    return NextResponse.json({
+      statusCode: 201,
+      message: "User registered successfully",
+    });
   } catch (error) {
-    return NextResponse.json({ error: String(error) }, { status: 500 });
+    console.log(error, "==== register err");
+    return NextResponse.json({
+      statusCode: 500,
+      message: "Internal server error",
+    });
   }
 }

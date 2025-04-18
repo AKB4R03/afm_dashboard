@@ -22,6 +22,7 @@ const middleware = async (request: NextRequest) => {
   const isAuthRoute =
     pathname.startsWith("/api/auth/login") ||
     pathname.startsWith("/api/auth/register");
+  // pathname.startsWith("/api/blog");
 
   if (isApi && !isAuthRoute) {
     const token = (await cookies()).get("token");

@@ -10,6 +10,9 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "AFM Dashboard",
   description: "Dashboard for PPM peeps",
+  icons: {
+    icon: "public/assets/images/logo-ppm.png",
+  },
 };
 
 export default function RootLayout({

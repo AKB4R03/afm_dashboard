@@ -1,4 +1,4 @@
-import { Db, ObjectId } from "mongodb";
+import { ObjectId } from "mongodb";
 import { getDb } from "./users";
 
 const COLLECTION_NAME = "article";

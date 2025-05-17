@@ -1,6 +1,5 @@
 import { Db, ObjectId } from "mongodb";
 import { getMongoClientInstance } from "@/db/db";
-import { hashPw } from "@/lib";
 
 type UserInfoModel = {
   name: string;

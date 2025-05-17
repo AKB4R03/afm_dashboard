@@ -28,7 +28,8 @@ const Footer = () => {
               </Link>
             </div>
             <p className="mt-3 text-sm font-['Poppins'] font-light italic">
-              "Sebaik-baiknya kalian adalah yang mengejar dunia dan akhirat."
+              &quot;Sebaik-baiknya kalian adalah yang mengejar dunia dan
+              akhirat.&quot;
             </p>
           </div>
 

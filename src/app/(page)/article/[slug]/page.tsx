@@ -48,6 +48,7 @@ export default function ArticleDetailPage() {
         }
       } catch (err) {
         setArticles([]);
+        console.log("Error fetching articles:", err);
       }
     };
     fetchArticles();
@@ -70,6 +71,7 @@ export default function ArticleDetailPage() {
         }
       } catch (err) {
         setArticle(null);
+        console.error("Error fetching article:", err);
       } finally {
         setLoading(false);
       }

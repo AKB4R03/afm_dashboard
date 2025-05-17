@@ -41,6 +41,7 @@ export async function POST(request: Request) {
       author,
       category,
       slug,
+      videoUrl,
       thumbnail: uploaded.url,
       imageUrl: uploaded.url,
       date: new Date().toISOString(),

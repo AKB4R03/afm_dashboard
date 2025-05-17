@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import { sign, verify } from "jsonwebtoken";
+import { sign } from "jsonwebtoken";
 import * as jose from "jose";
 const SECRET_KEY = "RAHASIA";
 

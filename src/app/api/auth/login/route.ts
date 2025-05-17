@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import { comparePw, hashPw, signToken } from "@/lib";
+import { comparePw, signToken } from "@/lib";
 import { getUserByName } from "@/model/users";
 
 export async function POST(request: Request) {

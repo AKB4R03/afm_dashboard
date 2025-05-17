@@ -7,6 +7,7 @@ import { getUserByName } from "@/model/users";
 export async function POST(request: Request) {
   try {
     const data = await request.json();
+    console.log("Received login data:", data); // Add this debug log
 
     const loginSchema = z.object({
       name: z.string().nonempty("Name is required"), // name dari form UI

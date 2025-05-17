@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "aos/dist/aos.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -43,13 +44,6 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-/* @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-} */
-
 :root {
   --radius: 0.625rem;
   --card: oklch(1 0 0);
@@ -83,6 +77,8 @@
   --sidebar-ring: oklch(0.705 0.015 286.067);
   --background: oklch(1 0 0);
   --foreground: oklch(0.141 0.005 285.823);
+  --nav-active: #a2d812;
+  --nav-active-rgb: 162, 216, 18;
 }
 
 .dark {
@@ -121,7 +117,7 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
   }
   body {
     @apply bg-background text-foreground;
@@ -130,4 +126,41 @@
 
 .afm-bg {
   background-color: #a2d812;
+}
+
+@layer components {
+  .nav-link {
+    @apply px-4 py-2 text-sm rounded-md transition-colors;
+    @apply hover:bg-[#a2d812] hover:text-black;
+  }
+
+  .nav-button {
+    @apply px-4 py-2 rounded-md transition-all duration-200;
+    @apply hover:bg-[#a2d812] hover:text-black;
+    @apply focus:outline-none focus:ring-2 focus:ring-[#a2d812]/50;
+  }
+
+  .nav-link.active {
+    @apply px-4 py-2 rounded-md transition-all duration-200;
+    @apply hover:bg-[#a2d812] hover:text-black;
+    @apply focus:outline-none focus:ring-2 focus:ring-[#a2d812]/50;
+  }
+
+  .mobile-nav-link {
+    @apply block px-4 py-2 text-sm text-white rounded-md;
+    @apply transition-colors hover:bg-[#a2d812] hover:text-black;
+  }
+
+  .btn-primary {
+    @apply bg-[#a2d812] text-black hover:bg-[#91c50f];
+    @apply transition-colors duration-200;
+    @apply focus:outline-none focus:ring-2 focus:ring-[#a2d812]/50;
+  }
+
+  .btn-secondary {
+    @apply bg-transparent text-black border border-[#a2d812];
+    @apply hover:bg-[#a2d812] hover:text-black;
+    @apply transition-colors duration-200;
+    @apply focus:outline-none focus:ring-2 focus:ring-[#a2d812]/50;
+  }
 }

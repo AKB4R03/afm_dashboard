@@ -1,7 +1,7 @@
 import { MongoClient } from "mongodb";
 
 const connectionDb =
-  process.env.MONGODB_CONNECTION_STRING ||
+  process.env.MONGODB_URI ||
   "mongodb+srv://masakbar2905:mei555@cluster0.ratubnl.mongodb.net/?retryWrites=true&w=majority";
 if (!connectionDb) {
   throw new Error("MONGODB_CONNECTION_STRING is not defined");

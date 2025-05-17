@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: "AFM Article",
   description: "Article for PPM peeps",
   icons: {
-    icon: "public/assets/images/logo-ppm.png",
+    icon: "/assets/img/logo-ppm.png",
   },
 };
 

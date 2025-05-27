@@ -136,7 +136,7 @@ const Navbar = ({ darkText = false }: { darkText?: boolean }) => {
                       : navText
                   }`}
                 >
-                  Article
+                  Artikel AFM
                 </Link>
                 <Link
                   href="http://afm-website-gilt.vercel.app/pendaftaran_santri_baru.html"
@@ -236,7 +236,7 @@ const Navbar = ({ darkText = false }: { darkText?: boolean }) => {
                   }`}
                   onClick={() => setIsOpen(false)}
                 >
-                  Article
+                  Artikel AFM
                 </Link>
                 <Link
                   href="http://afm-website-gilt.vercel.app/pendaftaran_santri_baru.html"

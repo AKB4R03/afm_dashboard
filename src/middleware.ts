@@ -2,37 +2,63 @@ import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { readPayload } from "./lib";
 
-const middleware = async (request: NextRequest) => {
+const PUBLIC_PATHS = ["/", "/article", "/api/article"];
+
+export default async function middleware(request: NextRequest) {
   const url = request.nextUrl.pathname;
 
-  // Allow public access to /api/article and /api/article/[slug]
+  // Allow public access to /article, /article/[slug], /api/article, /api/article/[slug]
+  const isPublicArticlePage =
+    url === "/article" || /^\/article\/[^/]+$/.test(url);
   const isPublicArticleApi =
     url === "/api/article" || /^\/api\/article\/[^/]+$/.test(url);
 
-  if (request.url.includes("/api") && !isPublicArticleApi) {
+  // Jika akses ke dashboard-pages (private)
+  const isDashboardPage = url.startsWith("/add-article");
+
+  // Jika akses ke halaman public, langsung lolos
+  if (PUBLIC_PATHS.includes(url) || isPublicArticlePage || isPublicArticleApi) {
+    return NextResponse.next();
+  }
+
+  // Jika akses ke dashboard-pages, cek token
+  if (isDashboardPage) {
     const cookiesStore = await cookies();
     const token = cookiesStore.get("token");
     if (!token) {
-      return NextResponse.json({
-        statusCode: 401,
-        error: "Unauthorized",
-      });
+      // Redirect ke halaman /article jika belum login
+      return NextResponse.redirect(new URL("/article", request.url));
     }
-
-    const tokenData = await readPayload<{ id: string; email: string }>(
-      token.value
-    );
-
-    const requestHeaders = new Headers(request.headers);
-    requestHeaders.set("x-user-id", tokenData.id);
-    requestHeaders.set("x-user-email", tokenData.email);
-
-    return NextResponse.next({
-      headers: requestHeaders,
-    });
+    try {
+      await readPayload(token.value);
+      return NextResponse.next();
+    } catch (err) {
+      // Token tidak valid, redirect ke /article
+      return NextResponse.redirect(new URL("/article", request.url));
+    }
   }
 
-  return NextResponse.next();
-};
+  // Untuk API selain /api/article, tetap cek token (jika ada API private lain)
+  if (url.startsWith("/api") && !isPublicArticleApi) {
+    const cookiesStore = await cookies();
+    const token = cookiesStore.get("token");
+    if (!token) {
+      return NextResponse.json(
+        { statusCode: 401, error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+    try {
+      await readPayload(token.value);
+      return NextResponse.next();
+    } catch (err) {
+      return NextResponse.json(
+        { statusCode: 401, error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+  }
 
-export default middleware;
+  // Default: allow
+  return NextResponse.next();
+}

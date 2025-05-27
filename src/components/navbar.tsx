@@ -129,6 +129,16 @@ const Navbar = ({ darkText = false }: { darkText?: boolean }) => {
                   Fasilitas
                 </Link>
                 <Link
+                  href={`${BASE_URL}/article`}
+                  className={`text-sm px-4 py-2 rounded-md transition-colors hover:bg-[#a2d812] hover:text-black ${
+                    pathname === "/article"
+                      ? "bg-[#a2d812] text-black"
+                      : navText
+                  }`}
+                >
+                  Article
+                </Link>
+                <Link
                   href="http://afm-website-gilt.vercel.app/pendaftaran_santri_baru.html"
                   className={`text-sm px-4 py-2 rounded-md transition-colors hover:bg-[#a2d812] hover:text-black ${navText} ${
                     pathname ===
@@ -138,16 +148,6 @@ const Navbar = ({ darkText = false }: { darkText?: boolean }) => {
                   }`}
                 >
                   Pendaftaran
-                </Link>
-                <Link
-                  href={`${BASE_URL}/article`}
-                  className={`text-sm px-4 py-2 rounded-md transition-colors hover:bg-[#a2d812] hover:text-black ${
-                    pathname === "/article"
-                      ? "bg-[#a2d812] text-black"
-                      : navText
-                  }`}
-                >
-                  Article
                 </Link>
               </div>
 
@@ -230,6 +230,15 @@ const Navbar = ({ darkText = false }: { darkText?: boolean }) => {
                   Fasilitas
                 </Link>
                 <Link
+                  href={`${BASE_URL}/article`}
+                  className={`text-sm px-4 py-2 rounded-md transition-colors hover:bg-[#a2d812] hover:text-black ${navText} ${
+                    pathname === "/article" ? "bg-[#a2d812] text-black" : ""
+                  }`}
+                  onClick={() => setIsOpen(false)}
+                >
+                  Article
+                </Link>
+                <Link
                   href="http://afm-website-gilt.vercel.app/pendaftaran_santri_baru.html"
                   className={`text-sm px-4 py-2 rounded-md transition-colors hover:bg-[#a2d812] hover:text-black ${navText} ${
                     pathname ===
@@ -240,15 +249,6 @@ const Navbar = ({ darkText = false }: { darkText?: boolean }) => {
                   onClick={() => setIsOpen(false)}
                 >
                   Pendaftaran
-                </Link>
-                <Link
-                  href={`${BASE_URL}/article`}
-                  className={`text-sm px-4 py-2 rounded-md transition-colors hover:bg-[#a2d812] hover:text-black ${navText} ${
-                    pathname === "/article" ? "bg-[#a2d812] text-black" : ""
-                  }`}
-                  onClick={() => setIsOpen(false)}
-                >
-                  Article
                 </Link>
               </div>
             </div>

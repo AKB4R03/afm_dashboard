@@ -85,10 +85,10 @@ export default function ArticlesPage() {
                 Mengenal PPM Al-Faqih Mandiri
               </h1>
             </div>
-            <p className="text-gray-500 leading-7 text-base md:text-lg">
+            <p className="text-black-500 leading-7 text-base md:text-lg">
               PPM Al-Faqih Mandiri (AFM) adalah pesantren modern yang
               berkomitmen membentuk{" "}
-              <b className="bg-yellow-500">
+              <b className="bg-[#a2d812]">
                 generasi muda berakhlak mulia, berilmu, dan mandiri.
               </b>{" "}
               Dengan kurikulum yang mengintegrasikan pendidikan agama dan umum,
